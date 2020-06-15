@@ -4,10 +4,14 @@ import Layout from "../components/layout"
 import { Link, graphql } from "gatsby"
 
 const Header = styled.h1`
-  ${tw`text-3xl ml-16`}
+  ${tw`text-3xl`}
 `
 const Header2 = styled.h2`
-  ${tw`text-2xl ml-16`}
+  ${tw`text-2xl`}
+`
+
+const PostList = styled.li`
+  ${tw`inline`}
 `
 
 export default class BlogList extends React.Component {
@@ -20,7 +24,6 @@ export default class BlogList extends React.Component {
           return (
             <React.Fragment key={i}>
               <Header2>{post.title}</Header2>
-              {currentPage}
               <Link
                 to={`/blog/${
                   currentPage === 1
@@ -39,6 +42,24 @@ export default class BlogList extends React.Component {
               >
                 Next
               </Link>
+              <h1>Post # {currentPage}</h1>
+
+              <ul>
+                {this.props.data.knife.edges.map(({ node: post }, i) => {
+                  return (
+                    <PostList>
+                      <Link to={`/blog/${post.slug.current}`}>
+                        {i !== 0 ? "~" : null} {post.title}{" "}
+                        <span>
+                          {i !== 0 && i === this.props.data.knife.edges.length
+                            ? "~"
+                            : null}
+                        </span>
+                      </Link>
+                    </PostList>
+                  )
+                })}
+              </ul>
             </React.Fragment>
           )
         })}
@@ -50,6 +71,16 @@ export default class BlogList extends React.Component {
 export const blogListQuery = graphql`
   query blogListQuery($skip: Int!, $limit: Int!) {
     allSanityPost(limit: $limit, skip: $skip) {
+      edges {
+        node {
+          title
+          slug {
+            current
+          }
+        }
+      }
+    }
+    knife: allSanityPost {
       edges {
         node {
           title

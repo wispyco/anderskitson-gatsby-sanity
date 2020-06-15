@@ -9,13 +9,21 @@ import React from "react"
 import PropTypes from "prop-types"
 import { useStaticQuery, graphql } from "gatsby"
 import { createGlobalStyle } from "styled-components"
+import tw, { styled } from "twin.macro"
 import Header from "./header"
 import "./layout.css"
 
 const GlobalStyle = createGlobalStyle`
   body {
     font-family:"Slabo 13px", cursive;
+    a{
+      ${tw`text-blue-400`}
+    }
   }
+`
+
+const Wrapper = styled.section`
+  ${tw`ml-16 mr-16`}
 `
 
 const Layout = ({ children }) => {
@@ -33,10 +41,10 @@ const Layout = ({ children }) => {
     <>
       <GlobalStyle />
       <Header siteTitle={data.site.siteMetadata.title} />
-      <div>
+      <Wrapper>
         <main>{children}</main>
         <footer></footer>
-      </div>
+      </Wrapper>
     </>
   )
 }
